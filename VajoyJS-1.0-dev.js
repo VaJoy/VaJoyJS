@@ -35,11 +35,11 @@ Here sets the minimum z-index as 1000.
 
 		$("li:gt(0)",this).on("mouseover",function(){addHover($(this));}).on("mouseleave",function(){removeHover($(this));})   //初始化绑定li的hover效果（激活状态的li不绑定）
 		
-		var UlMiddle = (function $(){   //窗口resize的时候调用
+		var UlMiddle = (function ResetAll(){   //窗口resize的时候调用
 			pic_w = $slide.width();
 			$pic.css("width",pic_w);
 			$ul.css({"margin-left":-$ul.width()/2,"left":pic_w/2});
-			return $;
+			return ResetAll;
 		})();
 		
 		function changeimg(i){     //图片切换效果函数
