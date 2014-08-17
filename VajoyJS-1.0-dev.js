@@ -74,12 +74,13 @@ Here sets the minimum z-index as 1000.
 		})
 		
 		if(isArrow){      //左右箭头按钮
-			var $arrows = $("<span></span><span></span>")
+			var $arrows = $("<span></span><span></span>");
 			$arrows.eq(0).addClass(arrow_left).css({"left":arrow_margin}).click(function(){ cirNum-=2; changeimg(cirNum);});
 			$arrows.eq(1).addClass(arrow_right).css({"right":arrow_margin}).click(function(){ changeimg(cirNum);});
-			var arrow_t = pic_h/2 - $arrows.eq(0).height()/2;  //左右两箭头距离顶部的高度，默认居中
-			$arrows.css({"display":"block","position":"absolute","z-index":z_index3,"cursor":"pointer","top":arrow_t,"opacity":"0.7"}).appendTo(this);
+			$arrows.css({"display":"block","position":"absolute","z-index":z_index3,"cursor":"pointer","opacity":"0.7"}).appendTo(container);
 			$arrows.hover(function(){$(this).css("opacity","1");},function(){$(this).css("opacity","0.7")});
+			var arrow_t = pic_h/2 - $arrows.eq(0).height()/2;  //左右两箭头距离顶部的高度，默认居中
+			$arrows.css("top",arrow_t);
 		}
 		
 		if(isAuto){
