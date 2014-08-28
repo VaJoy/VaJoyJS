@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Test</title>
+<link rel="stylesheet" type="text/css" href="../base.css">
+<style>
+#wrap{ position:absolute; display:none; width:450px; height:300px; padding:30px; background:white; text-align:center;}
+</style>
+</head>
+<body>
+<span id="open">点击我试试</span>
+<div id="wrap">
+    <span>hahahahaahaha</span><br/><br/>
+    <label>关闭窗口</label>
+</div>
+<script src="../jquery-1.11.1.js"></script>
+<script src="../VajoyJS-1.0-dev.js"></script>
+<script>
+jQuery(document).ready(function(){
+var openFun = function(){
+	alert("it`s open");
+};
+$.VJ_Dialog("#open","#wrap","#wrap label",30,30, openFun);   //俩个30是由于最外层加了padding，不含在外层高度内，故分别向左和向上移动30像素。非必填参数
+// $.VJ_Dialog("#open","#wrap","#wrap label",openFun);
+// $.VJ_Dialog("#open","#wrap","#wrap label",30);
+})
+</script>
+</body>
+</html>
