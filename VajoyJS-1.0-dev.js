@@ -181,6 +181,70 @@ Here sets the minimum z-index as 1000.
 		  dealPush();
 		  $(window).on("scroll resize",dealPush);
 	  }
+	  
+	  //上推效果模块
+	  $.fn.VJ_pin = function(relative_obj,space){
+		  var $r_o = relative_obj?$(relative_obj):false;
+		  var $p_o = $(this);
+		  var space = space?space:0;
+		  var ro_bt = relative_obj?$r_o.height() + $r_o.offset().top:0;
+		  var ro_t = relative_obj?$r_o.offset().top:0;
+		  var po_f = $p_o.css("float");
+		  var po_p = $p_o.css("position");
+		  var po_pd = $p_o.css("padding").replace("px","");
+		  var po_w = $p_o.width()-po_pd;
+		  var po_h = $p_o.height()-po_pd;
+		  var po_t = $p_o.offset().top;
+		  var $wrap = $("<div></div>");
+		  $wrap.css({"width":po_w,"height":po_h,"float":po_f,"position":po_p});
+		  $p_o.css({"width":po_w,"height":po_h});
+		  $p_o.wrap($wrap);
+		  var dealPin = function(){
+			  var thetop;
+			  var top1 = ro_bt - po_t - po_h;
+			  var top2 = ro_t - po_t - po_h - space;
+			  var wint =  $.VJ_getWin().t;
+			  if(!$r_o){
+				  if(po_t<wint){
+					  var thetop = wint - po_t;
+					  $p_o.css({"top":"0px","position":"fixed"});
+				  }else{
+					  $p_o.css({"top":"auto","position":po_p});
+				  }
+			  }else{ //有relative_obj参数的时候
+			  		if($p_o.closest(relative_obj).length > 0){ //relative_obj为祖先元素
+						if(po_t<wint && wint+po_h<ro_bt){
+							thetop = wint - po_t;
+							$p_o.css({"top":"0px","position":"fixed"});
+						}else if(wint+po_h>=ro_bt){
+							$p_o.css({"top":top1,"position":"relative"});
+						}else{
+							$p_o.css({"top":"auto","position":po_p});
+						}
+					}else{   //relative_obj为下方元素
+						var winh = $.VJ_getWin().h, wint =  $.VJ_getWin().t;
+						if(po_t < wint && winh + wint < ro_t - space){
+							var thetop = wint - po_t;
+					  		$p_o.css({"top":"0px","position":"fixed"});
+						}else if(po_t > wint){
+							$p_o.css({"top":"auto","position":po_p});
+						}else{
+							if(po_h>winh){
+								$p_o.css({"top":top2,"position":"relative"});
+							}else{
+								if(po_h+wint>ro_t - space){
+									$p_o.css({"top":top2,"position":"relative"});
+								}else{
+									$p_o.css({"top":"0px","position":"fixed"});
+								}
+							}
+						}
+					}
+			  }
+		  }
+		  dealPin();
+		  $(window).on("scroll resize",dealPin);
+	  }
   
 	  
   })(jQuery);

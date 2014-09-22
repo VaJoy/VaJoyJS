@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Test</title>
+<link rel="stylesheet" type="text/css" href="../base.css">
+<style>
+#bodywrap{margin:0 auto;width:1000px;}
+.top{margin:0 auto;height:160px; background:yellow;}
+.left{ float:left;width:70%; height:800px; background:blue;}
+.right{ float:right;width:30%;height:600px; background:red;}
+#bottom{margin-top:20px;height:350px; background:gray;}
+</style>
+</head>
+<body>
+<div id="bodywrap" class="clearfix">
+	<div class="top"></div>
+	<div class="left">1111</div>
+    <div class="right" id="right">22222</div>
+</div>
+<div id="bottom">
+    这里是底部
+</div>
+<script src="../jquery-1.11.1.js"></script>
+<script src="../VajoyJS-1.0-dev.js"></script>
+<script>
+jQuery(document).ready(function(){
+	//$("#right").VJ_pin("#bodywrap");
+	//$("#right").VJ_pin();
+	$("#right").VJ_pin("#bottom",20);
+})
+</script>
+</body>
+</html>
