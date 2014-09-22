@@ -21,9 +21,9 @@ jQuery(document).ready(function(){
 var openFun = function(){
 	alert("it`s open");
 };
-$.VJ_Dialog("#open","#wrap","#wrap label",30,30, openFun);   //俩个30是由于最外层加了padding，不含在外层高度内，故分别向左和向上移动30像素。非必填参数
+$.VJ_Dialog("#open","#wrap","#wrap label",openFun); 
 // $.VJ_Dialog("#open","#wrap","#wrap label",openFun);
-// $.VJ_Dialog("#open","#wrap","#wrap label",30);
+// $.VJ_Dialog("#open","#wrap","#wrap label",30,30, openFun);  //窗口分别向左和向上挪动30像素
 })
 </script>
 </body>

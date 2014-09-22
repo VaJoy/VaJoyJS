@@ -21,10 +21,10 @@ Here sets the minimum z-index as 1000.
 		  }
 	  }
 	  //居中模块
-	  $.VJ_stayCenter = function(obj,m_left,m_top){	
+	  $.VJ_stayCenter = function(obj,padding,m_left,m_top){	
 		  var m_left = m_left&&typeof m_left!=="function"?m_left:0, m_top = m_top&&typeof m_top!=="function"?m_top:0;
 		  var $obj = $(obj);
-		  var o_l = $.VJ_getWin().w/2 - m_left + $.VJ_getWin().l, o_h = $.VJ_getWin().h/2 - m_top + $.VJ_getWin().t;
+		  var o_l = $.VJ_getWin().w/2 - m_left -padding + $.VJ_getWin().l, o_h = $.VJ_getWin().h/2 - m_top  -padding + $.VJ_getWin().t;
 		  var obj_w = $obj.width()/2, obj_h = $obj.height()/2;
 		  $obj.css({"left":o_l,"margin-left":-obj_w, "top":o_h,"margin-top":-obj_h});
 	  }
@@ -139,19 +139,20 @@ Here sets the minimum z-index as 1000.
 	  $.VJ_Dialog = function(clicked_obj,show_obj,close_elm,m_left,m_top,open_fun){
 		  var $black_modalback = $("<div></div>");
 		  var $show_obj = $(show_obj);
+		  var so_padding = $show_obj.css("padding").replace("px",""); 
 		  var isOpenFun = typeof m_left==="function"?m_left:typeof m_top==="function"?m_top:typeof open_fun==="function"?open_fun:!1;
 		  $(clicked_obj).click(function(){
 			  $black_modalback.appendTo($("body"));
 			  var body_h = $("body").height();
 			  $show_obj.appendTo($("body")).css({"position":"absolute","z-index":z_index5}).fadeIn();
 			  $black_modalback.css({"position":"absolute","width":"100%","height":body_h,"background-color":"black","opacity":"0.6","left":"0","top":"0","z-index":z_index4,"display":"none"}).fadeIn();
-			  $.VJ_stayCenter(show_obj,m_left,m_top);
+			  $.VJ_stayCenter(show_obj,so_padding,m_left,m_top);
 			  if(isOpenFun!==!1){  //回调
 				  isOpenFun();
 			  }
 			  $(window).resize(function(){
 				  if($show_obj.css("display")!=="none"){
-					  $.VJ_stayCenter(show_obj,m_left,m_top);
+					  $.VJ_stayCenter(show_obj,so_padding,m_left,m_top);
 				  }
 			  });
 		  })	
@@ -162,7 +163,7 @@ Here sets the minimum z-index as 1000.
 	  }
 	  
 	  //上推效果模块
-	  $.fn.VJ_pushUP = function(relative_obj,space){
+	  $.fn.VJ_pushUp = function(relative_obj,space){
 		  var $ro = $(relative_obj);
 		  var space = space?space:0;
 		  var $po = $(this);
@@ -170,7 +171,7 @@ Here sets the minimum z-index as 1000.
 		  var ro_ot = $ro.offset().top;
 		  var dealPush = function(){
 			  var winh = $.VJ_getWin().h, wint =  $.VJ_getWin().t;
-			  if( winh + wint + space >= ro_ot ){
+			  if( winh + wint >= ro_ot ){
 				  var thebottom = winh +  wint - ro_ot + space;
 				  $po.css("bottom",thebottom);
 			  }else{

@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Test</title>
+<link rel="stylesheet" type="text/css" href="../base.css">
+<style>
+#bodywrap{height:900px;background:yellow;}
+#floatDiv{position:fixed; padding:30px; bottom:30px; left:50%; margin-left:300px; background:red; color:white;}
+#bottom{height:350px; background:gray;}
+</style>
+</head>
+<body>
+<div id="bodywrap"></div>
+<div id="floatDiv">悬浮图标</div>
+<div id="bottom">
+    这里是底部
+</div>
+<script src="../jquery-1.11.1.js"></script>
+<script src="../VajoyJS-1.0-dev.js"></script>
+<script>
+jQuery(document).ready(function(){
+	$("#floatDiv").VJ_pushUp("#bottom",30);
+	//$("#floatDiv").VJ_pushUp("#bottom");
+})
+</script>
+</body>
+</html>
