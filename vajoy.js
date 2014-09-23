@@ -1,10 +1,11 @@
-/*VaJoyJS 1.1
+/*VaJoyJS 1.2
 Widget based On jQuery and base.css
 @author VaJoy Larn 
 https://github.com/VaJoy/VaJoyJS
 http://vajoy.cnblogs.com
 NOTICE:
 Here sets the minimum z-index as 1000.
+Do not delete here while you are using VaJoyJS
 */
 
   (function($) {
@@ -231,19 +232,179 @@ Here sets the minimum z-index as 1000.
 						}else{
 							if(po_h>winh){
 								$p_o.css({"top":top2,"position":"relative"});
-							}else{
-								if(po_h+wint>ro_t - space){
-									$p_o.css({"top":top2,"position":"relative"});
-								}else{
-									$p_o.css({"top":"0px","position":"fixed"});
-								}
-							}
+							}else if(po_h+wint>ro_t - space){
+								  $p_o.css({"top":top2,"position":"relative"});
+							 }else{
+								  $p_o.css({"top":"0px","position":"fixed"});
+							 }
 						}
 					}
 			  }
 		  }
 		  dealPin();
 		  $(window).on("scroll resize",dealPin);
+	  }
+	  
+	  //表单过滤模块
+	  $.fn.VJ_filter = function(issus){ 
+		  var $input = $(this);
+		  var theval = "";
+		  var dealRepalce = function(obj,reg){
+			  var patt = new RegExp(reg);
+			  if(patt.test(obj.val())){
+				  theval = obj.val().replace(reg,"");
+				  obj.val(theval);
+			  }
+		  }
+		  $input.keyup(function(){
+			  switch(issus){
+				  case "chi": 
+					  dealRepalce($(this),/[\u4e00-\u9fa5]/g);  //过滤汉字
+					  break;
+				  case "db": 
+					  dealRepalce($(this),/[^\x00-\xff]/g);  //过滤含汉字在内的双字节字符
+					  break;
+				  case "spe": 
+					  dealRepalce($(this),/[^0-9a-zA-Z\u4e00-\u9fa5\-\_\.@#,\/\\\|\$\%\^\&\*\(\)\~\`\"\+\=\[\]\{\}\<\>\?\!\;\:，。？！：；“”《》｛｝—（）￥…·、～]/g);  //过滤特殊字符
+					  break;
+				  case "only_c": 
+					  dealRepalce($(this),/[^\u4e00-\u9fa5]/g);  //过滤除汉字外的字符
+					  break;
+				  case "only_e": 
+					  dealRepalce($(this),/[^a-zA-Z]/g);  //过滤英文外的字符
+					  break;
+				  case "only_n": 
+					  dealRepalce($(this),/[^0-9]/g);  //过滤正整数外的字符
+					  break;
+				  case "only_fn": 
+					  dealRepalce($(this),/^\.|[^\d\.]|\d*\.\d*\./g);  //过滤正浮点数外的字符
+				  case "only_nn": 
+					  dealRepalce($(this),/^[^\d\-]|[\d\-]{1}[^\d]+/g);  //过滤整数（含负数）外的字符
+					  break;
+				  case "only_nfn": 
+					  dealRepalce($(this),/^[^\d\-]|[^\d\.\-]|\-{0,1}\d+\.\d*\.|\-{0,1}\d+\.{0,1}\-/g);  //过滤浮点数（含负数）外的字符
+					  break;
+				  case "only_e_n": 
+					  dealRepalce($(this),/[^0-9a-zA-Z]/g);  //过滤数字和英文外的字符
+					  break;
+				  case "only_e_c_n": 
+					  dealRepalce($(this),/[^0-9a-zA-Z\u4e00-\u9fa5]/g);  //过滤除英文、汉字、数字外的字符
+					  break;
+				  case "only_name": 
+					  dealRepalce($(this),/[^0-9a-zA-Z\u4e00-\u9fa5\-\_]/g);  //过滤除英文、汉字、数字、_-外的字符
+					  break;
+				  case "only_ename": 
+					  dealRepalce($(this),/[^0-9a-zA-Z\u4e00-\u9fa5\-\_\.@]|\w*@\w*@/g);  //过滤除英文、汉字、数字、_-@.外的字符（匹配邮箱）
+					  break;
+				  case "only_mail": 
+					  dealRepalce($(this),/[^0-9a-zA-Z\_\.\@]|\w*@\w*@/g);  //过滤邮箱外的字符
+					  break;
+				  case "only_tel": 
+					  dealRepalce($(this),/[^\d\-]|\d{3,4}\-\d*\-|\d{4}\d+\-|\d{9}/g);  //过滤电话格式（含-）外的字符
+					  break;
+				  case "only_mobile": 
+					  dealRepalce($(this),/[^\d]|\d{12}/g);  //过滤手机号码
+					  break;
+				  default: 
+					  return false;
+					  break;
+			  }
+		  })
+	  }
+	  //表单验证模块
+	  $.fn.VJ_verify = function(issus,error_fun,correct_fun,empty_fun,fill_fun){
+		   var $input = $(this);
+		   var e_fun = error_fun;
+		   var c_fun = correct_fun?correct_fun:!1;
+		   var ep_fun = empty_fun?empty_fun:!1;
+		   var f_fun = fill_fun?fill_fun:!1;
+		   var is_ctn = !0;
+		   var dealEmpty = function(obj,e_fun,c_fun){
+			   if(!obj.val()){
+				   e_fun();
+				   return false;
+			   }else if(c_fun){
+					c_fun();	
+			   }
+			   return true;
+		   }
+		   var dealVeri = function(obj,reg,e_fun,c_fun,ep_fun,f_fun){
+			    var patt = new RegExp(reg);
+				if(!patt.test(obj.val())){
+					e_fun();
+					return false;
+				}else if(c_fun){
+					if(ep_fun) is_ctn=dealEmpty(obj,ep_fun,f_fun);
+					if(is_ctn) c_fun();
+					is_ctn = !0;
+				}
+		   }
+		   var dealVeri2 = function(obj,reg,e_fun,c_fun,ep_fun,f_fun){ 
+			    var patt = new RegExp(reg);
+				if(patt.test(obj.val())){
+					e_fun();
+					return false;
+				}else if(c_fun){
+					if(ep_fun) is_ctn=dealEmpty(obj,ep_fun,f_fun);
+					if(is_ctn) c_fun();
+					is_ctn = !0;
+				}
+		   }
+		   $input.blur(function(){
+			    switch(issus){
+				  case "mail": 
+					  dealVeri($(this),/^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/,e_fun,c_fun,ep_fun,f_fun);  //匹配邮箱
+					  break;
+				  case "mobile": 
+					  dealVeri($(this),/^(13[0-9]|15[0|3|6|7|8|9]|18[0|5|6|7|8|9])\d{8}$/,e_fun,c_fun,ep_fun,f_fun);  //匹配手机
+					  break;
+				  case "tel_area": 
+					  dealVeri($(this),/^\d{3,4}$/,e_fun,c_fun,ep_fun,f_fun);  //匹配区号
+					  break;
+				  case "tel": 
+					  dealVeri($(this),/^\d{7,8}$/,e_fun,c_fun,ep_fun,f_fun);  //匹配电话号码
+					  break;
+				  case "tel_all": 
+					  dealVeri($(this),/^\d{3,4}\-\d{7,8}$/,e_fun,c_fun,ep_fun,f_fun);  //匹配完整电话，如010-8888788
+					  break;
+				  case "iden": 
+					  dealVeri($(this), /^\d{15}$|^\d{17}[0-9xX]$/,e_fun,c_fun,ep_fun,f_fun);  //匹配身份证号
+					  break;
+				  case "zip": 
+					  dealVeri($(this),/^[1-9][0-9]{5}$/,e_fun,c_fun,ep_fun,f_fun);  //匹配邮编
+					  break;
+				  case "ip": 
+					  dealVeri($(this),/^([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])$/,e_fun,c_fun,ep_fun,f_fun);  //匹配ip地址
+					  break;
+				  case "avoid_num": 
+					  dealVeri2($(this),/^\d+$/,e_fun,c_fun,ep_fun,f_fun);  //禁止纯数字
+					  break;
+				  case "avoid_en": 
+					  dealVeri2($(this),/^[a-zA-Z]+$/,e_fun,c_fun,ep_fun,f_fun);  //禁止纯英文
+					  break;
+				  case "empty": 
+					  dealEmpty($(this),e_fun,c_fun);  //为空处理（这块主要是处理仅要求不能为空的字段）
+					  break;
+				  default: 
+				  	  if(typeof issus === "number"){    //匹配位数
+					    var thelen =  $(this).val().replace(/[^\x00-\xff]/g,"**").length; 
+					  	if(typeof e_fun !== "number"){  //只有下限
+							if(thelen<issus){ 
+								e_fun();
+							}else if(c_fun){
+								c_fun();
+							}
+						}else{  //含有上限
+							if(e_fun<thelen||thelen<issus){ 
+								c_fun();
+							}else if(ep_fun){
+								ep_fun();
+							}
+						}
+					  }else return false;
+					  break;
+			   }
+		   })
 	  }
   
 	  

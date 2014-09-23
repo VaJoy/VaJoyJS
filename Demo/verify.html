@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Test</title>
+<link rel="stylesheet" type="text/css" href="../base.css">
+</head>
+<body>
+<div>
+	<label>email</label><input type="text" id="email" /><br/>
+    <label>mobile</label><input type="text" id="mobile" /><br/>
+    <label>mobile2（suggested）</label><input type="text" maxlength="11" /><br/>
+    <label>tel(XXXX-XXXXXXX)</label><input type="text" id="tel"/><br/>
+    <label>try to type numbers only:</label><input type="text" id="nums" /><br/>
+    <label>password(at least 6 words):</label><input type="password" id="password" /><br/>
+    <label>try to type Chinese word which as 2 bits(at least 6 characters at most 10 characters):</label><input type="text" id="test" /><br/>
+    更多过滤方式请查看源码//u can find more filter-methods out throng the source
+</div>
+<script src="../jquery-1.11.1.js"></script>
+<script src="../vajoy.js"></script>
+<script>
+jQuery(document).ready(function(){
+	var error = function(){alert("error!!")};
+	var correct = function(){alert("correct!!")};
+	var empty = function(){alert("empty!!")};
+	var fill = function(){alert("filled!!")};
+	$("#email").VJ_verify("mail",error,correct);
+	$("#mobile").VJ_verify("mobile",error);
+	$("#tel").VJ_verify("tel_all",error,correct,empty,fill);
+	$("#nums").VJ_verify("avoid_num",error,correct,empty);
+	$("#password").VJ_verify(6,error,correct);
+	$("#test").VJ_verify(6,10,error,correct);
+})
+</script>
+</body>
+</html>

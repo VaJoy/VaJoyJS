@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Test</title>
+<link rel="stylesheet" type="text/css" href="../base.css">
+</head>
+<body>
+<div>
+	<label>email</label><input type="text" id="email" /><br/>
+    <label>mobile</label><input type="text" id="mobile" /><br/>
+    <label>mobile2（suggested）</label><input type="text" maxlength="11" /><br/>
+    <label>tel(numbers or XXX-XXXXXXX)</label><input type="text" id="tel"/><br/>
+    <label>float number</label><input type="text" id="float" /><br/>
+    更多过滤方式请查看源码//u can find more filter-methods out throng the source
+</div>
+<script src="../jquery-1.11.1.js"></script>
+<script src="../vajoy.js"></script>
+<script>
+jQuery(document).ready(function(){
+	$("#email").VJ_filter("only_mail");
+	$("#mobile").VJ_filter("only_mobile");
+	$("#tel").VJ_filter("only_tel");
+	$("#float").VJ_filter("only_nfn");
+})
+</script>
+</body>
+</html>
