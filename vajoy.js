@@ -471,7 +471,7 @@ Do not delete here while you are using VaJoyJS
 		  $a.click(function(){
 			  a_index = $a.index(this);
 			  thetop = a_index * win_h;
-			  $pages.parent().animate({"top":-thetop},600,  //默认切页时间600毫秒
+			  $pages.parent().stop().animate({"top":-thetop},600,  //默认切页时间600毫秒
 				function(){  //animate结束后的回调
 					hasfun = eval("typeof "+c_prefix+a_index+"==='function'"); 
 					if(hasfun){
