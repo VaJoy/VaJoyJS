@@ -2,6 +2,7 @@ VaJoyJS
 =======
 
 		an UI-Widget based on jQuery and base.css
+		2014/09/24  新增滚页功能和鼠标滚轮监听等功能
 		2014/09/23  新增表单过滤/验证功能
 		2014/09/22  新增Pin功能
 		2014/09/21  优化代码，添加pushUp功能

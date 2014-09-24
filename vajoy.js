@@ -21,6 +21,13 @@ Do not delete here while you are using VaJoyJS
 			 l:$win.scrollLeft()
 		  }
 	  }
+	  //获取页面可视区域高度复用
+	  $.VJ_getBH = function(){
+		  var body_h = $("body").height();
+		  var html_h = $("html").height();
+		  var h = body_h>html_h?body_h:html_h;
+		  return h
+	  }
 	  //居中模块
 	  $.VJ_stayCenter = function(obj,padding,m_left,m_top){	
 		  var m_left = m_left&&typeof m_left!=="function"?m_left:0, m_top = m_top&&typeof m_top!=="function"?m_top:0;
@@ -144,7 +151,7 @@ Do not delete here while you are using VaJoyJS
 		  var isOpenFun = typeof m_left==="function"?m_left:typeof m_top==="function"?m_top:typeof open_fun==="function"?open_fun:!1;
 		  $(clicked_obj).click(function(){
 			  $black_modalback.appendTo($("body"));
-			  var body_h = $("body").height();
+			  var body_h = $.VJ_getBH();
 			  $show_obj.appendTo($("body")).css({"position":"absolute","z-index":z_index5}).fadeIn();
 			  $black_modalback.css({"position":"absolute","width":"100%","height":body_h,"background-color":"black","opacity":"0.6","left":"0","top":"0","z-index":z_index4,"display":"none"}).fadeIn();
 			  $.VJ_stayCenter(show_obj,so_padding,m_left,m_top);
@@ -170,10 +177,11 @@ Do not delete here while you are using VaJoyJS
 		  var $po = $(this);
 		  var po_b = $po.css("bottom");
 		  var ro_ot = $ro.offset().top;
+		  var thebottom
 		  var dealPush = function(){
 			  var winh = $.VJ_getWin().h, wint =  $.VJ_getWin().t;
 			  if( winh + wint >= ro_ot ){
-				  var thebottom = winh +  wint - ro_ot + space;
+				  thebottom = winh +  wint - ro_ot + space;
 				  $po.css("bottom",thebottom);
 			  }else{
 				  $po.css("bottom",po_b);
@@ -183,7 +191,7 @@ Do not delete here while you are using VaJoyJS
 		  $(window).on("scroll resize",dealPush);
 	  }
 	  
-	  //上推效果模块
+	  //钉子模块
 	  $.fn.VJ_pin = function(relative_obj,space){
 		  var $r_o = relative_obj?$(relative_obj):false;
 		  var $p_o = $(this);
@@ -406,6 +414,101 @@ Do not delete here while you are using VaJoyJS
 			   }
 		   })
 	  }
+	  //鼠标滚轮事件
+	  $.VJ_mouseScroll = function(up_fun,down_fun,sp){
+		  var up_fun = up_fun?up_fun:!1;
+		  var down_fun = down_fun?down_fun:!1;
+		  var sp = sp?sp:7;
+		  var shake_proof = 0;  //防抖
+		  var scrollFunc=function(e){ 
+			e=e || window.event; 
+			if(e.wheelDelta){//IE/Opera/Chrome 
+				shake_proof++;
+				if(e.wheelDelta==120&&shake_proof>=sp)
+				{
+					if(up_fun) up_fun();
+					shake_proof=0;
+				}
+				else if(shake_proof==sp){		
+					if(down_fun) down_fun();
+					shake_proof=0;
+				 } 
+			}else if(e.detail){//Firefox 
+				shake_proof++;
+				if(e.detail==-3&&shake_proof>=sp){
+					console.log(e.detail);if(up_fun) up_fun();
+					shake_proof=0;
+				}else if(shake_proof>=sp){ 
+				console.log(e.detail);if(down_fun) down_fun();
+				shake_proof=0;
+				} 
+			}
+		  }
+		  if(document.addEventListener){ 
+		  	document.addEventListener('DOMMouseScroll',scrollFunc,false); 
+		  }
+		  window.onmousewheel=document.onmousewheel=scrollFunc;
+	  }
+	  
+	  //滚页效果模块
+	  $.fn.VJ_scrollPage = function(wrap,callback_prefix,reset_prefix){
+		  var a_index=0,thetop,win_h;
+		  var c_prefix = callback_prefix?callback_prefix:"";
+		  var r_prefix = reset_prefix?reset_prefix:"";
+		  var $a = $(this);
+		  var a_len = $a.length;
+		  var $wrap = $(wrap);
+		  var $pages = $wrap.children();
+		  var $moveWrap = $("<div></div>");
+		  $moveWrap.css({"position":"relative","height":"100%"});
+		  $pages.wrapAll($moveWrap);
+		  var setHeight = function(){
+			win_h = $.VJ_getWin().h;
+			$a.eq(a_index).click();
+		  }
+		  setHeight();
+		  $(window).on("resize",setHeight);
+		  $a.click(function(){
+			  a_index = $a.index(this);
+			  thetop = a_index * win_h;
+			  $pages.parent().animate({"top":-thetop},600,  //默认切页时间600毫秒
+				function(){  //animate结束后的回调
+					hasfun = eval("typeof "+c_prefix+a_index+"==='function'"); 
+					if(hasfun){
+						eval("page"+a_index+"()");  //如果有回调函数则执行该函数
+					} 
+					for(var i=0;i<a_len;i++){ 
+						if(i==a_index) continue;
+						hasfun = eval("typeof "+r_prefix+i+"==='function'"); 
+						if(hasfun){ 
+						eval("reset"+i+"()");  //如果有其它page初始化函数则执行该函数
+						}
+					}
+				}
+			  );
+		  }) 
+		  var up_fun = function(){  //鼠标滚轮UP事件
+			  if(a_index>0){
+				  var temp = a_index-1;
+				  $a.eq(temp).click();
+			  }
+		  }
+		  var down_fun = function(){  //鼠标滚轮DOWN事件
+			  if(a_len-1>a_index){
+				  var temp = a_index+1;
+				  $a.eq(temp).click();
+			  }
+		  }
+		  $.VJ_mouseScroll(up_fun,down_fun);
+	  }
+	  
+	  //识别是否万恶的IE
+	  $.VJ_isIE = function(){
+		  var ua = navigator.userAgent.toLowerCase();
+		  var iereg = new RegExp("trident","gi");
+		  return iereg.test(ua);
+	  }
+	  
   
 	  
   })(jQuery);
