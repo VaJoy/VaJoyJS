@@ -15,13 +15,20 @@ jQuery(document).ready(function(){
 	var down_fun = function(){
 		$("div").text("DOWN!");
 	}
-	$.VJ_mouseScroll(up_fun,down_fun);
+	$.VJ_mouseScroll(up_fun,down_fun);  
 	//$.VJ_mouseScroll(up_fun,down_fun,1); //最后一个数字是防抖作用，数值越大，滚轮要滚动的时间要更久才能生效
+	//$.VJ_mouseScroll2(up_fun,down_fun);  //这个是按照setTimeout来防抖的，默认1000毫秒
+	//$.VJ_mouseScroll2(up_fun,down_fun,500);  //你也可以设置时间，比如500毫秒
+	$("button").click(function(){
+		$.VJ_mouseScroll(up_fun,down_fun,"cancle"); //取消滚轮监听事件
+		//$.VJ_mouseScroll2(up_fun,down_fun,"cancle");
+	})
 })
 </script>
 </head>
 <body>
       <div>
       </div>
+      <button>取消滚轮事件</button>
 </body>
 </html>

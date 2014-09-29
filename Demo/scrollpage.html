@@ -16,6 +16,7 @@
   .page4{ background:gray; color:white;}
   .bottom_nav{ position:fixed; bottom:0px;padding:10px 0px;width:100%; text-align:center; background:black; opacity:0.8;}
   .bottom_nav a{margin:0px 10px; color:white;}
+  .bottom_nav  a.act_a{font-weight:bold; color:yellow;}
 </style>
 <script>
 //注意回调和重置函数一定要写为全局/外部函数
@@ -33,8 +34,8 @@
 	}
 jQuery(document).ready(function(){
 
-	$("#bottom_nav a").VJ_scrollPage("#screen_wrap","page","reset");  //page是激活页面的回调事件，reset是非激活页面的重置事件
-	
+	$("#bottom_nav a").VJ_scrollPage("#screen_wrap","page","reset","act_a");  //page是激活页面的回调事件，reset是非激活页面的重置事件,act_a是a标签点击后激活的class
+	//$("#bottom_nav a").VJ_scrollPage("#screen_wrap");
 })
 </script>
 </head>
