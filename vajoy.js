@@ -36,7 +36,8 @@ Do not delete here while you are using VaJoyJS
 		  
 	  //幻灯片模块
 	  $.fn.VJ_slidePics = function(li_default_class, li_active_class, arrow_left, arrow_right, isAutoplay, style){
-		  var  arrow_left=arrow_left||true,isAuto = isAutoplay===!1?isAutoplay:true, isArrow=!1, isScroll=!1;
+		  var  arrow_left=arrow_left.toString()?arrow_left:true;
+		  var isAuto = isAutoplay===!1?isAutoplay:true, isArrow=!1, isScroll=!1;
 		  var st = null, rd = Math.ceil(Math.random()*10000);
 		  if(typeof(arrow_left)==="boolean"){
 			  isAuto = arrow_left;
@@ -74,11 +75,12 @@ Do not delete here while you are using VaJoyJS
   
 		  $("li:gt(0)",this).on("mouseover",function(){addHover($(this));}).on("mouseleave",function(){removeHover($(this));})   //初始化绑定li的hover效果（激活状态的li不绑定）
 		  
-		  var UlMiddle = (function ResetAll(){   //窗口resize的时候调用
+		  var UlMiddle = (function ResetAll(a){   //窗口resize的时候调用
 			  pic_w = $slide.width();
 			  $pic.css("width",pic_w);
 			  $ul.css({"margin-left":-$ul.width()/2 ,"left":pic_w/2});
 			  if(isScroll){ $picWrap.css("width",pic_w * pic_l); }
+			  if(a) changeimg(cirNum);
 			  return ResetAll;
 		  })();
 		  function changeimg(i){     //图片切换效果函数
@@ -135,7 +137,7 @@ Do not delete here while you are using VaJoyJS
 			eval("VJ_slide_autoPlay"+rd+" = function(){ changeimg(cirNum);}"); //动态生成函数，防止setInterval覆盖
 			st = setInterval(eval("VJ_slide_autoPlay"+rd),auto_time); 
 		  }
-		  $(window).on("resize",function(){UlMiddle();});
+		  $(window).on("resize",function(){UlMiddle(1);});
   
 	  }
   
