@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <title>Test</title>
 <link rel="stylesheet" type="text/css" href="../base.css">
+<script src="../jquery-1.11.1.js"></script>
+<script src="../vajoy.js"></script>
 <style>
 #outside1{ width:100%; height:300px; position:relative;}
 #outside2{ width:900px; height:300px; position:relative;}
@@ -23,15 +25,14 @@
    <a href="#" target="_blank" style="background:url(../img/2.jpg) center" title="图片描述文本"></a>
    <a href="#" target="_blank" style="background:url(../img/3.jpg) center" title="图片描述文本"></a>
 </div>
-<script src="../jquery-1.11.1.js"></script>
-<script src="../vajoy.js"></script>
+
 <script>
 jQuery(document).ready(function(){
-$("#outside1").VJ_slidePics("li_df","li_ac","arrow_left","arrow_right");
+//$("#outside1").VJ_slidePics("li_df","li_ac","arrow_left","arrow_right");
 //$("#outside1").VJ_slidePics("li_df","li_ac","false","scroll");
 //$("#outside1").VJ_slidePics("li_df","li_ac","false");
 //$("#outside1").VJ_slidePics("li_df","li_ac","scroll");
-//$("#outside1").VJ_slidePics("li_df","li_ac");
+$("#outside1").VJ_slidePics("li_df","li_ac");
 $("#outside2").VJ_slidePics("li_df","li_ac","false","scroll");
 })
 </script>

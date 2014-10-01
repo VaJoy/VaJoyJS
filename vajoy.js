@@ -37,6 +37,7 @@ Do not delete here while you are using VaJoyJS
 	  //幻灯片模块
 	  $.fn.VJ_slidePics = function(li_default_class, li_active_class, arrow_left, arrow_right, isAutoplay, style){
 		  var  arrow_left=arrow_left||true,isAuto = isAutoplay===!1?isAutoplay:true, isArrow=!1, isScroll=!1;
+		  var st = null, rd = Math.ceil(Math.random()*10000);
 		  if(typeof(arrow_left)==="boolean"){
 			  isAuto = arrow_left;
 		  }
@@ -89,7 +90,7 @@ Do not delete here while you are using VaJoyJS
 						  cirNum=cirCount;
 						  i=cirCount;
 				  }
-				  cirNum= i+1;
+				  cirNum= i+1; 
 				  $li.eq(i).removeClass(li_default_class).addClass(li_active_class)
 				  .off("mouseover").off("mouseleave")  //激活状态的li不绑定hover
 				  .siblings("li").removeClass(li_active_class).addClass(li_default_class)
@@ -99,15 +100,15 @@ Do not delete here while you are using VaJoyJS
 					  var pic_left = pic_w * i;
 					  $picWrap.animate({"left": -pic_left });
 					  if(isAuto){
-						  clearTimeout(st);
-						  st = setInterval("VJ_slideScroll_autoPlay()",auto_time);
+						  clearInterval(st);
+						  st = setInterval(eval("VJ_slide_autoPlay"+rd),auto_time);
 					  }
 				  }else{
 					  if($pic.eq(i).css("z-index")!=z_index1)
 					  $pic.fadeOut(500).css("z-index",z_index0).eq(i).css("z-index",z_index1).fadeIn(500);
 						  if(isAuto){
-							  clearTimeout(st);
-							  st = setInterval("VJ_slideFade_autoPlay()",auto_time);
+							  clearInterval(st);
+							  st = setInterval(eval("VJ_slide_autoPlay"+rd),auto_time);
 						  }
 				  }
 			  } 
@@ -129,12 +130,10 @@ Do not delete here while you are using VaJoyJS
 			  
 			  $arrows.css("top",arrow_t+"px");
 		  }
-		  
+
 		  if(isAuto){
-			VJ_slideFade_autoPlay = function(){  //自动播放函数（全局）
-					changeimg(cirNum);
-				}
-			st = setInterval("VJ_slideFade_autoPlay()",auto_time);
+			eval("VJ_slide_autoPlay"+rd+" = function(){ changeimg(cirNum);}"); //动态生成函数，防止setInterval覆盖
+			st = setInterval(eval("VJ_slide_autoPlay"+rd),auto_time); 
 		  }
 		  $(window).on("resize",function(){UlMiddle();});
   
