@@ -27,7 +27,8 @@ Do not delete here while you are using VaJoyJS
 	  }
 	  //居中模块
 	  $.VJ_stayCenter = function(obj,padding,m_left,m_top){	
-		  var m_left = m_left&&typeof m_left!=="function"?m_left:0, m_top = m_top&&typeof m_top!=="function"?m_top:0;
+		  var m_left = m_left&&typeof m_left!=="function"?m_left:0,
+              m_top = m_top&&typeof m_top!=="function"?m_top:0;
 		  var $obj = $(obj);
 		  var o_l = $.VJ_getWin().w/2 - m_left -padding + $.VJ_getWin().l, o_h = $.VJ_getWin().h/2 - m_top  -padding + $.VJ_getWin().t;
 		  var obj_w = $obj.width()/2, obj_h = $obj.height()/2;
@@ -36,7 +37,7 @@ Do not delete here while you are using VaJoyJS
 		  
 	  //幻灯片模块
 	  $.fn.VJ_slidePics = function(li_default_class, li_active_class, arrow_left, arrow_right, isAutoplay, style){
-		  var  arrow_left=arrow_left.toString()?arrow_left:true;
+		  var arrow_left=arrow_left.toString()?arrow_left:true;
 		  var isAuto = isAutoplay===!1?isAutoplay:true, isArrow=!1, isScroll=!1;
 		  var st = null, rd = Math.ceil(Math.random()*10000);
 		  if(typeof(arrow_left)==="boolean"){
@@ -161,7 +162,7 @@ Do not delete here while you are using VaJoyJS
 					  $.VJ_stayCenter(show_obj,so_padding,m_left,m_top);
 				  }
 			  });
-		  })	
+		  })
 		  $(close_elm).click(function(){
 			  $show_obj.hide();
 			  $black_modalback.remove();
@@ -284,6 +285,7 @@ Do not delete here while you are using VaJoyJS
 					  break;
 				  case "only_fn": 
 					  dealRepalce($(this),/^\.|[^\d\.]|\d*\.\d*\./g);  //过滤正浮点数外的字符
+                      break;
 				  case "only_nn": 
 					  dealRepalce($(this),/^[^\d\-]|[\d\-]{1}[^\d]+/g);  //过滤整数（含负数）外的字符
 					  break;
